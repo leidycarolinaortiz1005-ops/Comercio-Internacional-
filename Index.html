@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>comercio-internacional: guía desde cero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#F6F8FA; --panel:#FFFFFF; --ink:#1F2328; --muted:#59636E; --line:#D0D7DE;
+  --kw:#CF222E; --str:#0A3069; --fn:#8250DF; --num:#0550AE; --ok:#1A7F37; --acc:#0969DA;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:'IBM Plex Sans','Helvetica Neue',Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#0D1117; --panel:#161B22; --ink:#E6EDF3; --muted:#8B949E; --line:#30363D;
+    --kw:#FF7B72; --str:#A5D6FF; --fn:#D2A8FF; --num:#79C0FF; --ok:#7EE787; --acc:#58A6FF;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#0D1117; --panel:#161B22; --ink:#E6EDF3; --muted:#8B949E; --line:#30363D;
+  --kw:#FF7B72; --str:#A5D6FF; --fn:#D2A8FF; --num:#79C0FF; --ok:#7EE787; --acc:#58A6FF;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:1.05rem;line-height:1.65}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.mono{font-family:var(--mono)}
+.com{color:var(--muted);font-family:var(--mono);font-size:.9rem}
+.kw{color:var(--kw)}.fn{color:var(--fn)}.str{color:var(--str)}.num{color:var(--num)}.ok{color:var(--ok)}
+
+.bar{display:flex;align-items:center;gap:.6rem;padding:.6rem 1rem;background:var(--panel);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.dots i{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.3rem;background:var(--line)}
+.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
+
+.hero{max-width:60rem;margin:0 auto;padding:2.5rem 1.25rem 1.5rem}
+.term{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:1.25rem 1.4rem;font-family:var(--mono);font-size:clamp(.85rem,2.4vw,1.05rem);line-height:1.9;overflow-x:auto}
+.ln{opacity:0;animation:on .01s forwards;animation-delay:calc(var(--d)*450ms);white-space:pre-wrap}
+.cursor{display:inline-block;width:.6em;height:1.1em;background:var(--ok);vertical-align:text-bottom;animation:blink 1s steps(1) infinite}
+@keyframes on{to{opacity:1}}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion: reduce){.ln{opacity:1;animation:none!important}.cursor{animation:none!important}}
+h1{font-family:var(--mono);font-size:clamp(1.8rem,5vw,3rem);line-height:1.15;margin:1.75rem 0 .5rem;letter-spacing:-.02em}
+.lead{color:var(--muted);max-width:56ch}
+
+.layout{max-width:68rem;margin:0 auto;padding:0 1.25rem 3rem;display:grid;grid-template-columns:13rem 1fr;gap:2rem}
+.explorer{align-self:start;position:sticky;top:calc(1rem + env(safe-area-inset-top,0px));font-family:var(--mono);font-size:.85rem}
+.explorer h2{font-size:.8rem;font-weight:400;color:var(--muted);margin:0 0 .5rem}
+.explorer a{display:block;padding:.35rem .6rem;border-left:2px solid var(--line);color:var(--muted)}
+.explorer a:hover{color:var(--ink);border-left-color:var(--acc);background:var(--panel)}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr;gap:1rem}
+  .explorer{position:static;overflow-x:auto;white-space:nowrap}
+  .explorer a{display:inline-block;border-left:0;border-bottom:2px solid var(--line)}
+}
+section{padding:2rem 0;border-top:1px solid var(--line);scroll-margin-top:1rem}
+section:first-of-type{border-top:0}
+h2.t{font-family:var(--mono);font-size:clamp(1.35rem,3vw,1.9rem);margin:.2rem 0 .8rem;letter-spacing:-.01em}
+p{max-width:62ch;margin:0 0 1rem}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem;margin-top:1rem}.g3{grid-template-columns:repeat(3,1fr)}.gl{grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}@media (max-width:720px){.grid,.g3{grid-template-columns:1fr}}
+.blk{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:.9rem 1.05rem;display:flex;flex-direction:column}
+.blk b{display:block;font-family:var(--mono);color:var(--fn);padding-bottom:.45rem;margin-bottom:.55rem;border-bottom:1px dashed var(--line)}
+.blk p{font-size:.98rem;line-height:1.55;margin:0}
+.blk .risk{margin-top:auto;padding-top:.7rem;font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.hint{border-left:3px solid var(--ok);padding:.1rem 0 .1rem .9rem;margin:1.2rem 0;color:var(--muted);max-width:62ch}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel);margin-top:1rem}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.95rem;line-height:1.45}
+th,td{text-align:left;padding:.7rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-weight:700;color:var(--muted)}
+td:first-child{font-family:var(--mono);font-weight:700;color:var(--kw);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+ol.steps{list-style:none;counter-reset:s;margin:1rem 0 0;padding:0;font-family:var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:6px;font-size:.92rem}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:3rem 1fr;padding:.55rem 0;line-height:1.55}
+ol.steps li::before{content:counter(s);text-align:right;padding-right:1rem;color:var(--muted);border-right:1px solid var(--line)}
+ol.steps li span{padding:0 1rem;font-family:var(--sans);font-size:1rem}
+ol.steps strong{color:var(--str);font-family:var(--mono)}
+.search{width:100%;max-width:26rem;padding:.65rem .9rem;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink);font:inherit;font-family:var(--mono);font-size:.95rem}
+.count{display:block;margin:.5rem 0 0}
+.ic{width:1.35rem;height:1.35rem;stroke:var(--num);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.3em;margin-right:.3rem}.art{display:block;width:100%;height:auto;max-width:40rem;margin:1.5rem 0 0}.art text{font-family:var(--mono);font-size:13px;fill:var(--ink)}.art .m{fill:var(--muted);font-size:12px}.art .ln2{fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.art .sea{fill:none;stroke:var(--num);stroke-width:2.5;stroke-linecap:round}.art .hull{fill:var(--panel);stroke:var(--muted);stroke-width:2.5;stroke-linejoin:round}.art .box{fill:var(--panel);stroke:var(--line);stroke-width:2}.k1{fill:var(--kw)}.k2{fill:var(--fn)}.k3{fill:var(--num)}.k4{fill:var(--ok)}.art .arw{stroke-width:2.5;fill:none}
+.part{font-family:var(--mono);font-size:.85rem;color:var(--muted);margin:2.5rem 0 0;display:flex;align-items:center;gap:.7rem}.part::before{content:'▸';color:var(--acc)}.part::after{content:'';flex:1;border-top:1px dashed var(--line)}.fold{font-family:var(--mono);font-size:.8rem;color:var(--ok);margin:1rem 0 .25rem}.fold:first-of-type{margin-top:0}@media (max-width:860px){.fold{display:inline-block;margin:0 .4rem 0 .9rem}}.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:.9rem 0 .2rem}.chips button{font-family:var(--mono);font-size:.82rem;padding:.35rem .75rem;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);cursor:pointer}.chips button[aria-pressed="true"]{border-color:var(--acc);color:var(--acc)}
+footer{border-top:1px solid var(--line);padding:1.5rem 1.25rem 2.5rem;text-align:center}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-ship" viewBox="0 0 24 24"><path d="M2 15h20l-3 5H5zM6 15v-4h12v4M9 11V8h6v3"/></symbol><symbol id="i-plane" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></symbol><symbol id="i-truck" viewBox="0 0 24 24"><path d="M1 6h13v10H1zM14 10h5l3 3v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></symbol><symbol id="i-multi" viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></symbol></svg>
+<div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span> comercio-internacional / guia.md</div>
+
+<header class="hero">
+  <div class="term" aria-label="Terminal de bienvenida">
+    <div class="ln" style="--d:0"><span class="ok">$</span> comercio --explicar</div>
+    <div class="ln" style="--d:1"><span class="com">// cargando guía...</span></div>
+    <div class="ln" style="--d:2"><span class="kw">const</span> <span class="fn">mundo</span> = { <span class="str">paises</span>: <span class="num">195</span>, <span class="str">intercambio</span>: <span class="str">"bienes y servicios"</span> }</div>
+    <div class="ln" style="--d:3"><span class="ok">✔</span> listo. Elige un archivo a la izquierda <span class="cursor"></span></div>
+  </div>
+  <h1>Comercio internacional, paso a paso</h1>
+  <p class="lead">Una guía para entender cómo se compran, venden, mueven y cobran productos entre países. Sin saber nada antes.</p>
+  <svg class="art" viewBox="0 0 600 190" role="img" aria-label="Buque de carga con contenedores de colores, una grúa en el muelle y un globo terráqueo"><circle class="ln2" cx="530" cy="40" r="22"/><ellipse class="ln2" cx="530" cy="40" rx="9" ry="22"/><path class="ln2" d="M508 40h44M512 28h36M512 52h36"/><path class="ln2" d="M60 160V40h90M140 40v30M20 160h70"/><path class="hull" d="M100 130h460l-40 30H130z"/><rect class="k1" x="130" y="110" width="40" height="20"/><rect class="k3" x="174" y="110" width="40" height="20"/><rect class="k4" x="218" y="110" width="40" height="20"/><rect class="k2" x="262" y="110" width="40" height="20"/><rect class="k1" x="306" y="110" width="40" height="20"/><rect class="k4" x="350" y="110" width="40" height="20"/><rect class="k3" x="394" y="110" width="40" height="20"/><rect class="k2" x="438" y="110" width="40" height="20"/><rect class="k2" x="174" y="88" width="40" height="20"/><rect class="k1" x="218" y="88" width="40" height="20"/><rect class="k3" x="262" y="88" width="40" height="20"/><rect class="k4" x="306" y="88" width="40" height="20"/><rect class="k2" x="350" y="88" width="40" height="20"/><rect class="k1" x="394" y="88" width="40" height="20"/><rect class="k4" x="218" y="66" width="40" height="20"/><rect class="k2" x="262" y="66" width="40" height="20"/><rect class="k1" x="306" y="66" width="40" height="20"/><rect class="k3" x="350" y="66" width="40" height="20"/><rect class="hull" x="490" y="78" width="50" height="52"/><path class="ln2" d="M498 92h34"/><path class="sea" d="M0 170q25-8 50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0t50 0"/></svg>
+</header>
+
+<div class="layout">
+<nav class="explorer" aria-label="Archivos">
+  <h2>EXPLORADOR</h2>
+  <div class="fold">fundamentos/</div>
+  <a href="#que-es">que-es.md</a>
+  <a href="#incoterms">incoterms.md</a>
+  <div class="fold">operacion/</div>
+  <a href="#documentos">documentos.md</a>
+  <a href="#transporte">transporte.md</a>
+  <a href="#pagos">pagos.md</a>
+  <div class="fold">marco-y-proceso/</div>
+  <a href="#acuerdos">acuerdos.md</a>
+  <a href="#pasos">exportar.md</a>
+  <div class="fold">consulta/</div>
+  <a href="#glosario">glosario.md</a>
+</nav>
+
+<main>
+<div class="part">fundamentos/ · las bases</div>
+<section id="que-es">
+  <div class="com">// que-es.md</div>
+  <h2 class="t">Qué es el comercio internacional</h2>
+  <p>Es el intercambio de bienes y servicios entre países. Ningún país produce todo lo que necesita: cada uno vende lo que hace mejor o más barato y compra lo demás. Colombia vende café, flores y petróleo, y compra maquinaria, tecnología y medicamentos.</p>
+  <div class="grid g3">
+    <div class="blk"><b>exportar()</b><p>Vender productos o servicios a otro país. Entra dinero del exterior.</p></div>
+    <div class="blk"><b>importar()</b><p>Comprar productos o servicios de otro país. Sale dinero hacia el exterior.</p></div>
+    <div class="blk"><b>balanzaComercial</b><p>Exportaciones menos importaciones. Si vendes más de lo que compras, hay superávit; si es al revés, déficit.</p></div>
+  </div>
+  <svg class="art" viewBox="0 0 600 130" role="img" aria-label="Esquema: el país A envía mercancía al país B y el país B devuelve el pago"><rect class="box" x="10" y="30" width="150" height="70" rx="6"/><text x="85" y="58" text-anchor="middle">País A</text><text class="m" x="85" y="80" text-anchor="middle">exporta()</text><rect class="box" x="440" y="30" width="150" height="70" rx="6"/><text x="515" y="58" text-anchor="middle">País B</text><text class="m" x="515" y="80" text-anchor="middle">importa()</text><path class="arw" style="stroke:var(--ok)" d="M170 52h255M415 44l12 8-12 8"/><text x="300" y="42" text-anchor="middle">mercancía</text><path class="arw" style="stroke:var(--num)" d="M430 82H175M185 74l-12 8 12 8"/><text x="300" y="110" text-anchor="middle">pago</text></svg>
+  <p class="hint">También hay comercio de servicios: turismo, software, transporte y consultoría. No todo viaja en contenedores.</p>
+</section>
+
+<section id="incoterms">
+  <div class="com">// incoterms.md</div>
+  <h2 class="t">Incoterms: quién paga y quién responde</h2>
+  <p>Son reglas internacionales de la Cámara de Comercio Internacional que dicen hasta dónde llega la responsabilidad del vendedor y desde dónde empieza la del comprador: transporte, seguro, riesgos e impuestos. Estos son seis de los más usados (versión 2020).</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Sigla</th><th>Nombre</th><th>En palabras simples</th></tr></thead>
+    <tbody>
+      <tr><td>EXW</td><td>En fábrica</td><td>El vendedor deja la mercancía lista en su bodega. Todo lo demás lo asume el comprador.</td></tr>
+      <tr><td>FCA</td><td>Franco transportista</td><td>El vendedor entrega la mercancía al transportista que elige el comprador y la deja lista para exportar.</td></tr>
+      <tr><td>FOB</td><td>Franco a bordo</td><td>El vendedor entrega la mercancía a bordo del buque en el puerto de salida. Solo marítimo.</td></tr>
+      <tr><td>CIF</td><td>Costo, seguro y flete</td><td>El vendedor paga flete y seguro hasta el puerto de destino. Solo marítimo.</td></tr>
+      <tr><td>DAP</td><td>Entregada en lugar</td><td>El vendedor entrega en el destino acordado, sin pagar los impuestos de importación.</td></tr>
+      <tr><td>DDP</td><td>Entregada con derechos pagados</td><td>El vendedor asume todo, incluso los aranceles. Es el más exigente para él.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="hint">De EXW a DDP, el vendedor asume cada vez más. Por eso el Incoterm cambia el precio que cotizas.</p>
+</section>
+
+<div class="part">operacion/ · cómo se mueve y se cobra</div>
+<section id="documentos">
+  <div class="com">// documentos.md</div>
+  <h2 class="t">Documentos clave</h2>
+  <p>Una operación sin papeles en regla se queda parada en la aduana.</p>
+  <div class="grid g3">
+    <div class="blk"><b>facturaComercial</b><p>La cuenta de cobro entre vendedor y comprador: qué se vende, cantidad, precio y condiciones.</p></div>
+    <div class="blk"><b>listaDeEmpaque</b><p>Detalla cómo viene la carga: bultos, pesos, medidas y contenido de cada caja.</p></div>
+    <div class="blk"><b>documentoDeTransporte</b><p>En barco es el Bill of Lading (BL); en avión, la guía aérea. Prueba que la carga fue entregada al transportista.</p></div>
+    <div class="blk"><b>certificadoDeOrigen</b><p>Dice en qué país se produjo la mercancía. Permite acceder a rebajas de arancel por acuerdos comerciales.</p></div>
+    <div class="blk"><b>declaracionAduanera</b><p>El trámite ante la aduana para exportar o importar legalmente. En Colombia la controla la DIAN.</p></div>
+    <div class="blk"><b>polizaDeSeguro</b><p>Cubre pérdida o daño de la carga durante el viaje.</p></div>
+  </div>
+</section>
+
+<section id="transporte">
+  <div class="com">// transporte.md</div>
+  <h2 class="t">Cómo viaja la carga</h2>
+  <div class="grid">
+    <div class="blk"><b><svg class="ic" aria-hidden="true"><use href="#i-ship"/></svg>maritimo</b><p>El más barato y el que mueve la mayor parte del comercio mundial en volumen. Es lento, de semanas. Ideal para cargas grandes y pesadas.</p></div>
+    <div class="blk"><b><svg class="ic" aria-hidden="true"><use href="#i-plane"/></svg>aereo</b><p>Rápido y caro. Para productos de alto valor, perecederos o urgentes: flores, medicinas, electrónicos.</p></div>
+    <div class="blk"><b><svg class="ic" aria-hidden="true"><use href="#i-truck"/></svg>terrestre</b><p>Camiones y trenes. Muy útil entre países vecinos y para llevar la carga al puerto o desde él.</p></div>
+    <div class="blk"><b><svg class="ic" aria-hidden="true"><use href="#i-multi"/></svg>multimodal</b><p>Combina varios medios con un solo contrato: por ejemplo camión, barco y camión otra vez.</p></div>
+  </div>
+  <p class="hint">Un contenedor de 20 pies se llama TEU, la medida con la que se cuenta la capacidad de puertos y barcos.</p>
+</section>
+
+<section id="pagos">
+  <div class="com">// pagos.md</div>
+  <h2 class="t">Cómo se cobra una venta internacional</h2>
+  <p>Vender es la mitad del trabajo: falta cobrar. Como vendedor y comprador no se conocen ni están en el mismo país, cada forma de pago reparte el riesgo distinto.</p>
+  <div class="grid">
+    <div class="blk"><b>prepago</b><p>El comprador paga antes de que se envíe la mercancía. Es lo más seguro para quien vende.</p><div class="risk">riesgo: lo asume el comprador</div></div>
+    <div class="blk"><b>cartaDeCredito</b><p>Un banco se compromete a pagar al vendedor si este presenta los documentos exigidos. Da seguridad a ambos y por eso es muy usada en operaciones grandes.</p><div class="risk">riesgo: repartido, con costo bancario</div></div>
+    <div class="blk"><b>cobranzaDocumentaria</b><p>Los bancos envían los documentos al comprador, que solo los recibe si paga o acepta pagar. Es más barata que la carta de crédito, pero sin garantía de pago.</p><div class="risk">riesgo: medio para el vendedor</div></div>
+    <div class="blk"><b>cuentaAbierta</b><p>Se envía la mercancía y el comprador paga después, en un plazo pactado. Exige mucha confianza.</p><div class="risk">riesgo: lo asume el vendedor</div></div>
+  </div>
+  <p class="hint">Casi siempre se negocia en dólares o euros, así que la tasa de cambio también afecta cuánto ganas realmente.</p>
+</section>
+
+<div class="part">marco-y-proceso/ · reglas y recorrido completo</div>
+<section id="acuerdos">
+  <div class="com">// acuerdos.md</div>
+  <h2 class="t">Aranceles y acuerdos comerciales</h2>
+  <p>El arancel es un impuesto que se paga al entrar una mercancía a un país. Los gobiernos lo usan para recaudar y para proteger a su industria local. Un tratado de libre comercio (TLC) reduce o elimina aranceles entre los países que lo firman, así tu producto llega más barato al comprador.</p>
+  <div class="grid">
+    <div class="blk"><b>colombiaEnElMundo</b><p>Tiene acuerdos con países y bloques como Estados Unidos, la Unión Europea, la Alianza del Pacífico y la Comunidad Andina, entre otros.</p></div>
+    <div class="blk"><b>instituciones</b><p>DIAN (aduanas e impuestos), MinCIT (Ministerio de Comercio), ProColombia (promoción de exportaciones) y la VUCE, donde se hacen trámites de comercio exterior.</p></div>
+  </div>
+  <p class="hint">Los acuerdos y las normas cambian con el tiempo. Antes de una operación real, confirma los datos en las páginas oficiales.</p>
+</section>
+
+<section id="pasos">
+  <div class="com">// exportar.md</div>
+  <h2 class="t">Cómo se hace una exportación</h2>
+  <p>El camino típico de un producto, de la fábrica al cliente en otro país.</p>
+  <ol class="steps">
+    <li><span><strong>elegir()</strong> producto y mercado. Investiga quién lo compraría, a qué precio y con qué requisitos.</span></li>
+    <li><span><strong>clasificar()</strong> el producto. Busca su partida arancelaria para saber aranceles y permisos.</span></li>
+    <li><span><strong>cotizar()</strong> con un Incoterm. Define qué costos asumes y cuáles el comprador.</span></li>
+    <li><span><strong>vender()</strong> y acordar la forma de pago. Emite la factura comercial.</span></li>
+    <li><span><strong>empacar()</strong> y contratar transporte y seguro según valor y urgencia.</span></li>
+    <li><span><strong>declarar()</strong> ante la aduana. La mercancía sale con sus documentos.</span></li>
+    <li><span><strong>cobrar()</strong> según lo pactado. Ahí cierra la operación.</span></li>
+  </ol>
+</section>
+
+<div class="part">consulta/ · busca lo que no entiendas</div>
+<section id="glosario">
+  <div class="com">// glosario.md</div>
+  <h2 class="t">Glosario</h2>
+  <input class="search" id="q" type="search" placeholder="buscar término..." aria-label="Buscar en el glosario" autocomplete="off">
+  <div class="chips" id="c" role="group" aria-label="Filtrar por categoría"></div>
+  <span class="com count" id="n" aria-live="polite"></span>
+  <div class="grid gl" id="g"></div>
+</section>
+</main>
+</div>
+
+<footer class="com">Guía introductoria para aprender. No reemplaza asesoría profesional ni las normas vigentes.</footer>
+
+<script>
+var T=[
+["Agente de aduanas","Profesional o empresa autorizada para hacer trámites aduaneros en nombre de importadores y exportadores."],
+["Aduana","Autoridad que controla qué entra y qué sale del país y cobra los impuestos correspondientes."],
+["Arancel","Impuesto que se paga al ingresar una mercancía a un país."],
+["Balanza comercial","Diferencia entre lo que un país exporta y lo que importa."],
+["Barrera no arancelaria","Regla distinta al arancel que dificulta importar: normas técnicas, sanitarias, permisos o cuotas."],
+["Bill of Lading (BL)","Documento de transporte marítimo. Prueba que la carga fue recibida por el naviero."],
+["Cadena de suministro","Todo el recorrido de un producto: materias primas, fabricación, transporte, distribución y entrega."],
+["Carta de crédito","Compromiso de un banco de pagar al vendedor si presenta los documentos exigidos."],
+["Certificado de origen","Documento que acredita el país donde se produjo la mercancía."],
+["Cobranza documentaria","Forma de pago donde los bancos entregan los documentos al comprador contra pago o aceptación."],
+["Consolidación de carga","Juntar mercancías de varios clientes en un mismo contenedor para ahorrar costos."],
+["Cuenta abierta","Venta donde el comprador paga después de recibir la mercancía, en un plazo acordado."],
+["Cuota","Límite de cantidad de un producto que se puede importar en un periodo."],
+["Drawback","Devolución de aranceles o impuestos pagados por insumos importados que se usaron en un producto exportado."],
+["Dumping","Vender en el exterior a un precio por debajo del normal para desplazar a la competencia. Puede ser sancionado."],
+["FCL / LCL","FCL: contenedor completo para un solo cliente. LCL: carga que no llena un contenedor y se comparte."],
+["Flete","Costo de transportar la mercancía de un punto a otro."],
+["Incoterms","Reglas internacionales que reparten costos, riesgos y responsabilidades entre vendedor y comprador."],
+["Nacionalizar","Cumplir los trámites y pagar los tributos para que una mercancía importada quede libre en el país."],
+["Operador logístico","Empresa que gestiona transporte, almacenamiento y distribución para otras."],
+["Partida arancelaria","Código numérico que clasifica cada producto en el Sistema Armonizado. Define arancel y permisos."],
+["Prepago","Pago anticipado: el comprador paga antes del envío."],
+["Reexportación","Exportar una mercancía que antes se importó, sin transformarla."],
+["Régimen de importación","Modalidad bajo la cual entra la mercancía: definitiva (para quedarse) o temporal (para volver a salir)."],
+["Salvaguardia","Medida temporal que protege a una industria local frente a un aumento fuerte de importaciones."],
+["Subvención","Ayuda del Estado a un sector que le permite vender a menor precio."],
+["TEU","Unidad equivalente a un contenedor de 20 pies. Mide la capacidad de barcos y puertos."],
+["Trazabilidad","Posibilidad de seguir un producto y saber dónde está y por dónde pasó."],
+["TRM","Tasa Representativa del Mercado: la tasa de cambio oficial del peso colombiano frente al dólar."],
+["Tránsito aduanero","Paso de mercancía por un país hacia otro destino, bajo control de la aduana."],
+["Valor en aduana","Valor de la mercancía sobre el cual se calculan los aranceles."],
+["Zona franca","Área delimitada con beneficios tributarios y aduaneros para producir, almacenar o comerciar."]
+];
+var g=document.getElementById('g'),q=document.getElementById('q'),n=document.getElementById('n');
+var cat='Todos';
+var C={'Aduanas y trámites':['Agente de aduanas','Aduana','Certificado de origen','Drawback','Nacionalizar','Partida arancelaria','Reexportación','Régimen de importación','Tránsito aduanero','Valor en aduana','Zona franca'],'Política comercial':['Arancel','Balanza comercial','Barrera no arancelaria','Cuota','Dumping','Salvaguardia','Subvención'],'Transporte y logística':['Bill of Lading (BL)','Cadena de suministro','Consolidación de carga','FCL / LCL','Flete','Incoterms','Operador logístico','TEU','Trazabilidad'],'Pagos y dinero':['Carta de crédito','Cobranza documentaria','Cuenta abierta','Prepago','TRM']};
+function catOf(t){for(var k in C){if(C[k].indexOf(t)>-1)return k}return''}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function draw(){
+  var k=norm(q.value.trim()),h='',c=0;
+  T.forEach(function(t){
+    if((cat==='Todos'||C[cat].indexOf(t[0])>-1)&&(!k||norm(t[0]+' '+t[1]).indexOf(k)>-1)){c++;h+='<div class="blk"><b>'+esc(t[0])+'</b><p>'+esc(t[1])+'</p><div class="risk">'+catOf(t[0])+'</div></div>'}
+  });
+  g.innerHTML=h||'<p class="com">Sin resultados. Prueba con otra palabra.</p>';
+  n.textContent=c+' de '+T.length+' términos';
+}
+q.addEventListener('input',draw);
+var cb=document.getElementById('c');
+['Todos'].concat(Object.keys(C)).forEach(function(k){var b=document.createElement('button');b.type='button';b.textContent=k;b.setAttribute('aria-pressed',String(k==='Todos'));b.onclick=function(){cat=k;Array.prototype.forEach.call(cb.children,function(x){x.setAttribute('aria-pressed',String(x===b))});draw()};cb.appendChild(b)});
+draw();
+</script>
+</body>
+</html>
